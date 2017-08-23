@@ -1,4 +1,6 @@
 Preq:
+ - sudo dd bs=1m if=raspian.img of=/dev/disken conv=sync
  - Dropbox uploader App created.
  - Gmail domain added?
- - 
+ - cacert.pem? 
+ - dropbox path for uploaded files

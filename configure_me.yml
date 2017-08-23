@@ -1,0 +1,24 @@
+---
+# Configure these variables before running playbook.yml
+# WIFI Config
+wifi_ssid: "MindFuck"
+wifi_password: ""
+
+# Gmail config
+gmail_user: "lallassu"
+gmail_password: "lallassu"
+mailname: "nergal.se"
+
+# Alarm config
+alarm_email_list: "lallassu@gmail.com"
+
+# Motion config
+motion_live_user: "nergal"
+motion_live_password: "nergal"
+motion_live_port: 8080
+
+# Dropbox config
+dropbox_key: xxxxxxxxxx
+dropbox_secret: xxxxxxxxxxx
+dropbox_oauth_access_token: xxxxxxxxxxxx
+dropbox_oauth_access_token_secret: xxxxxxxxxx

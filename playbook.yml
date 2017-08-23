@@ -4,114 +4,156 @@
   gather_facts: yes
   vars_files:
       - configure_me.yml
-  vars:
-     packages_to_install: [ screen mutt motion postfix ffmpegthumbnailer ]
-     update_cache: yes
   sudo: yes
   tasks:
-     - name: Update system
-       apt:
-          upgrade: yes
-          update_cache: {{ update_cache }}
-          cache_valid_time: 86400
+      - name: Update system
+        apt:
+            upgrade: yes
+            update_cache: yes
+            cache_valid_time: 86400
 
-     - name: install packages
-       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
-       with_items: packages_to_install
+      - name: install packages
+        apt: pkg={{ item }} state=installed update_cache=no
+        with_items: [ screen, mutt, motion, postfix, ffmpegthumbnailer ]
 
-     - name: Setup camera
-       path: /etc/modules
-       block: bcm2835_v4l2
+      - name: Setup camera 
+        lineinfile:
+            path: /etc/modules
+            state: present
+            line: bcm2835_v4l2
 
-     - name: Check if camera device exists
-       path: /dev/video0
+      - name: Assign hostname
+        raw:  "echo {{hostname|quote}} > /etc/hostname"
 
-     - name: Assign hostname
-       raw:  "echo {{hostname|quote}} > /etc/hostname"
+      - name: Assign mailname
+        raw:  "echo {{mailname}} > /etc/mailname"
 
-     - name: Assign mailname
-       raw:  "echo {{mailname}} > /etc/mailname"
+      - name: Setup WiFi
+        blockinfile:
+            path: /etc/wpa_supplicant/wpa_supplicant.conf
+            insertafter: "update_config=1"
+            create: yes
+            state: present
+            block: |
+                network={
+                    ssid="{{ wifi_ssid }}"
+                    psk="{{ wifi_password }}"
+                }
 
-     - name: Setup WiFi
-       path: /etc/wpa_supplicant/wpa_supplicant.conf
-       insertafter: "update_config=1"
-       block: |
-           network={
-               ssid="{{ wifi_ssid }}"
-               psk="{{ wifi_password }}"
-           }
+      - name: Setup SASL Password
+        blockinfile:
+            path: /etc/postfix/sasl_passwd
+            state: present
+            create: yes
+            block: |
+                [smtp.gmail.com]:587  {{ gmail_email }}:{{ gmail_password }}
 
-     - name: Setup SASL Password
-       path: /etc/postfix/sasl_passwd
-       block: |
-           [smtp.gmail.com]:587  {{ gmail_email }}:{{ gmail_password }}
+      - name: Create SASL Database
+        shell: postmap sasl_passwd
+        args:
+            chdir: /etc/postfix/
 
-     - name: Create SASL Database
-       shell: postmap sasl_passwd
-       args:
-           chdir: /etc/postfix/
-       
-     - name: Setup postfix configuration
-       path: /etc/postfix/main.cf
-       block: |
-           smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
-           smtp_sasl_security_options = noanonymous
-           smtp_sasl_auth_enable = yes
-           smtp_tls_CAfile = /etc/postfix/cacert.pem
-           smtp_use_tls = yes 
-           myorigin = /etc/mailname
-           relayhost = [smtp.gmail.com]:587
+      - name: Setup postfix configuration
+        blockinfile:
+            path: /etc/postfix/main.cf
+            state: present
+            block: |
+                smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+                smtp_sasl_security_options = noanonymous
+                smtp_sasl_auth_enable = yes
+                smtp_tls_CAfile = /etc/postfix/cacert.pem
+                smtp_use_tls = yes 
+                myorigin = /etc/mailname
+                relayhost = [smtp.gmail.com]:587
 
-     - name: Create recording directory
-       file: path=/home/pi/Dropbox/{{ hostname }} state=directory mode=0755
+      - name: Create recording directory
+        file: 
+            path: /home/pi/Dropbox/{{ hostname }} 
+            state: directory 
+            owner: pi
+            group: pi
 
-     - name: Setup fstab with tmpfs filesystems
-       path: /etc/fstab
-       block: |
-           tmpfs    /tmp    tmpfs    defaults,noatime,nosuid,size=10m    0 0
-           tmpfs    /var/tmp    tmpfs    defaults,noatime,nosuid,size=10m    0 0
-           tmpfs    /var/log    tmpfs    defaults,noatime,nosuid,mode=0755,size=20m    0 0
-           tmpfs    /home/pi/Dropbox/motion/{{ hostname }} tmpfs    defaults,noatime,nosuid,mode=0755,size=500m
-       
-     - name: Setup cronjobs
+      - name: Setup fstab with tmpfs filesystems
+        blockinfile:
+            state: present
+            path: /etc/fstab
+            block: |
+                tmpfs    /tmp    tmpfs    defaults,noatime,nosuid,size=10m    0 0
+                tmpfs    /var/tmp    tmpfs    defaults,noatime,nosuid,size=10m    0 0
+                tmpfs    /var/log    tmpfs    defaults,noatime,nosuid,mode=0755,size=20m    0 0
+                tmpfs    /home/pi/Dropbox/{{ hostname }} tmpfs  defaults,noatime,nosuid,uid=pi,gid=pi,mode=0755,size=500m
 
+      - name: Add motion configuration
+        template: 
+            src: motion.conf 
+            owner: pi
+            group: pi
+            dest: /etc/motion/motion.conf
 
-     - name: Configure motion
- 
-     - name: Add motion start script
-       template: src=start.sh dest=/home/pi/start.sh
+      - name: Add motion start script
+        template:
+            src: start.sh 
+            dest: /home/pi/start.sh
+            group: pi
+            owner: pi
+            mode: 0550
 
-     - name: Add alarm script
-       template: src=alarm.sh dest=/home/pi/alarm.sh
+      - name: Add alarm script
+        template: 
+            src: alarm.sh 
+            dest: /home/pi/alarm.sh
+            group: pi
+            owner: pi
+            mode: 0550
 
-     - name: Add Dropbox uploader script 1
-       template: src=dropbox_uploader.sh dest=/home/pi/dropbox_uploader.sh
+      - name: Add Dropbox uploader script 1
+        copy:
+            src: dropbox_uploader.sh 
+            dest: /home/pi/dropbox_uploader.sh
+            group: pi
+            owner: pi
+            mode: 0550
 
-     - name: Add Dropbox uploader script 2
-       template: src=upload.sh dest=/home/pi/upload.sh
+      - name: Add Dropbox uploader script 2
+        template: 
+            src: upload.sh 
+            dest: /home/pi/upload.sh
+            group: pi
+            owner: pi
+            mode: 0550
 
-     - name: Add Dropbox uploader config
-       template: src=dropbox.conf dest=/home/pi/.dropbox_uploader
+      - name: Add Dropbox uploader config
+        template: 
+            src: dropbox.conf 
+            dest: /home/pi/.dropbox_uploader
+            group: pi
+            owner: pi
 
-     - cron:
-         name: "Start motion on boot"
-         special_time: reboot
-         job: "/bin/bash /home/pi/motion/start.sh"
+      - name: Cron for motion on boot
+        cron:
+            name: "Start motion on boot"
+            special_time: reboot
+            user: pi
+            job: "/bin/bash /home/pi/start.sh"
 
-     - cron:
-         name: "Verify that motion is started"
-         minute: "*/1"
-         job: "/bin/bash /home/pi/motion/start.sh"
+      - name: Cron to restart motion if not started
+        cron:
+            name: "Verify that motion is started"
+            minute: "*/1"
+            user: pi
+            job: "/bin/bash /home/pi/start.sh"
 
-     - cron:
-         name: "Clear old alarm files"
-         minute: "*/1"
-         job: "find /home/pi/Dropbox/motion/{{ hostname }}/* -mtime +7 -exec rm {} \;"
+      - name: Cron for clearing 7 days old recordings  
+        cron:
+            name: "Clear old alarm files"
+            minute: "*/1"
+            user: pi
+            job: find /home/pi/Dropbox/motion/{{ hostname }}/* -mtime +7 -exec rm {} \;
 
-     - name: Reboot
-       shell: sleep 2 && shutdown -r now "Rebooting"
-       async: 1
-       poll: 0
-       sudo: true
-       ignore_errors: true
+      - name: Reboot
+        shell: sleep 2 && shutdown -r now "Rebooting"
+        async: 1
+        poll: 0
+        sudo: true
+        ignore_errors: true
 

@@ -4,3 +4,4 @@ Preq:
  - Gmail domain added?
  - cacert.pem? 
  - dropbox path for uploaded files
+ - ssh-copy-id required

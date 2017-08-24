@@ -1,2 +1,2 @@
 [cams]
-{{ ip }} ansible_user=pi host_key_checking=false hostname={{ hostname }}
+192.168.1.151 ansible_user=pi host_key_checking=false hostname=rpicam2

@@ -28,6 +28,13 @@
       - name: Assign mailname
         raw:  "echo {{mailname}} > /etc/mailname"
 
+      - name: Setup /etc/hosts
+        lineinfile:
+            path: /etc/hosts
+            regexp: '^127.0.0.1 '
+            state: present
+            line: 127.0.1.1 {{ hostname }}
+
       - name: Setup WiFi
         blockinfile:
             path: /etc/wpa_supplicant/wpa_supplicant.conf
@@ -45,6 +52,7 @@
             path: /etc/postfix/sasl_passwd
             state: present
             create: yes
+            mode: 0600
             block: |
                 [smtp.gmail.com]:587  {{ gmail_email }}:{{ gmail_password }}
 
@@ -61,10 +69,16 @@
                 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
                 smtp_sasl_security_options = noanonymous
                 smtp_sasl_auth_enable = yes
-                smtp_tls_CAfile = /etc/postfix/cacert.pem
+                smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
                 smtp_use_tls = yes 
                 myorigin = /etc/mailname
-                relayhost = [smtp.gmail.com]:587
+
+      - name: Postfix relayhost
+        lineinfile:
+            path: /etc/postfix/main.cf
+            regexp: '^relayhost'
+            state: present
+            line: relayhost = [smtp.gmail.com]:587
 
       - name: Create recording directory
         file: 

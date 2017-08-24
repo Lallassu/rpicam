@@ -37,7 +37,10 @@ from which host.
     * Format the memory card with FAT32 filesystem.
     * Write the image to the card (see below)
 * To make Dropbox upload work, create an application in Dropbox.
+* Enable SSH on the raspberry (raspi-config -> interface -> enable ssh)
+* Enable Camera on the raspberry (raspi-config -> interface -> enable Camera)
 * Copy SSH key to the raspberry (default password is "raspberry" in the raspian image, please do change!) (see below)
+* TP-cable to connect raspberry with first time (before wifi is setup through the ansible script)
 
 ### Commands
     # Write raspian image to disk
@@ -49,6 +52,7 @@ from which host.
 Configure all settings in *configure_me.yml*. This is the main configuration file for settings such as
 email, dropbox upload etc.
 
+Hosts are configured one per line in *hosts* file. Only thing to specify here is IP and preferred hostname.
 
 ## Usage
     ansible-playbook playbook.yml

@@ -1,6 +1,8 @@
 ---
 # Configure these variables before running playbook.yml
 
+hostname: "rpi_cam2"
+
 # WIFI Config
 wifi_ssid: ""
 wifi_password: ""

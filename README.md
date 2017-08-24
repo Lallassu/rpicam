@@ -55,6 +55,7 @@ The script will finish by rebooting the raspberry. The motion software will be r
 screen and you can watch the process with 'screen -r motion' logged in as user 'pi'.
 
 You will also be able to live view the camera using the credentials you configured in *configure_me.yml*.
+
     http://<ip>:8080/
 
 ## NOTE

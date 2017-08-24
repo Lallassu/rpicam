@@ -22,10 +22,10 @@ snapshot from the recorded movie to the specified email address including record
 from which host.
 
 **Example:**
-**Subject:** rpi_cam2: Motion detection
-**ALERT:** Motion detection(2017-08-24 07:56:08), CAMERA: rpi_cam2
-
-![Image Preview](https://github.com/lallassu/rpicam/blob/master/example.png)
+    **Subject:** rpi_cam2: Motion detection
+    **ALERT:** Motion detection(2017-08-24 07:56:08), CAMERA: rpi_cam2
+    
+    ![Image Preview](https://github.com/lallassu/rpicam/blob/master/example.png)
 
 
 ## Prerequsities

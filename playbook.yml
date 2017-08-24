@@ -78,7 +78,7 @@
             state: present
             path: /etc/fstab
             block: |
-                tmpfs    /tmp    tmpfs    defaults,noatime,nosuid,size=10m    0 0
+                tmpfs    /tmp        tmpfs    defaults,noatime,nosuid,size=10m    0 0
                 tmpfs    /var/tmp    tmpfs    defaults,noatime,nosuid,size=10m    0 0
                 tmpfs    /var/log    tmpfs    defaults,noatime,nosuid,mode=0755,size=20m    0 0
                 tmpfs    /home/pi/Dropbox/{{ hostname }} tmpfs  defaults,noatime,nosuid,uid=pi,gid=pi,mode=0755,size=500m

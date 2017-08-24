@@ -162,7 +162,7 @@
             name: "Clear old alarm files"
             minute: "*/1"
             user: pi
-            job: find /home/pi/Dropbox/{{ hostname }}/* -mtime +7 -exec rm {} \;
+            job: find /home/pi/Dropbox/{{ hostname }}/* -mtime +7 -exec rm {} \; >/dev/null 2>&1
 
       - name: Reboot
         shell: sleep 2 && shutdown -r now "Rebooting"

@@ -47,6 +47,8 @@ from which host.
     $ sudo dd bs=1m if=<unzipped_image>.img of=/dev/<sd_card_disk> conv=sync
     # Copy ssh key
     $ ssh-copy-id pi@<ip>
+    # Enable camera and ssh
+    $ sudo raspi-config
 
 ## Configure
 Configure all settings in *configure_me.yml*. This is the main configuration file for settings such as

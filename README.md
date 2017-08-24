@@ -1,5 +1,7 @@
 # Automated Raspberry PI Camera Surveillance Setup
-![RPI 3 with camera inside relativly-waterproof box with night vision](https://github.com/Lallassu/rpicam/blob/master/camera.jpg)
+![cam](https://github.com/Lallassu/rpicam/blob/master/camera.jpg)
+The picture above is my setup with an RPI 3 with camera and nightvision added. It in a (relativly) water proof box
+and has a small fan to circulate the air inside the box to lower the temperature about 10 degrees celcius.
 
 ## About
 This is a Ansible scripted automated setup of an Raspberry PI with an attached camera.

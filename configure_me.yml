@@ -2,6 +2,7 @@
 # Configure these variables before running playbook.yml
 
 hostname: "rpi_cam2"
+ip: "192.168.1.152"
 
 # WIFI Config
 wifi_ssid: ""

@@ -1,17 +1,5 @@
-TODO: - kort på rpi + camera
-      - screenshot på avi upload dropbox
-Preq:
- - FAT-32 formatted
- - sudo dd bs=1m if=raspian.img of=/dev/disken conv=sync
- - Dropbox uploader App created.
- - Gmail domain added?
- - cacert.pem? 
- - dropbox path for uploaded files
- - ssh-copy-id required
-
-
 # Automated Raspberry PI Camera Surveillance Setup
-![Camera](https://github.com/lallassu/rpicam/master/camera.jpg)
+![RPI 3 with camera inside relativly-waterproof box with night vision](https://github.com/Lallassu/rpicam/blob/master/camera.jpg)
 
 ## About
 This is a Ansible scripted automated setup of an Raspberry PI with an attached camera.
@@ -34,22 +22,21 @@ snapshot from the recorded movie to the specified email address including record
 from which host.
 
 **Example:**
-*Subject:* rpi_cam2: Motion detection
-*ALERT:* Motion detection(2017-08-24 07:56:08), CAMERA: rpi_cam2
+**Subject:** rpi_cam2: Motion detection
+**ALERT:** Motion detection(2017-08-24 07:56:08), CAMERA: rpi_cam2
 
-![Image Preview](https://github.com/lallassu/rpicam/master/example.png)
+![Image Preview](https://github.com/lallassu/rpicam/blob/master/example.png)
 
 
 ## Prerequsities
 * Raspberry PI2 with an camera attached to the camera slot.
 * Host with ansible 1.2+ installed.
 * Raspian installed on the memory card.
-    * https://www.raspberrypi.org/downloads/raspbian/
     * Download raspian lite image.
-       * https://downloads.raspberrypi.org/raspbian_lite_latest
+       https://downloads.raspberrypi.org/raspbian_lite_latest
     * Format the memory card with FAT32 filesystem.
     * Write the image to the card:
-    *    sudo dd bs=1m if=<unzipped_image>.img of=/dev/<sd_card_disk> conv=sync
+      sudo dd bs=1m if=<unzipped_image>.img of=/dev/<sd_card_disk> conv=sync
 * To make Dropbox upload work, create an application in Dropbox.
 * Copy SSH key to the raspberry (default password is "raspberry" in the raspian image, please do change!)
     ssh-copy-id pi@<ip>
@@ -58,7 +45,6 @@ from which host.
 Configure all settings in *configure_me.yml*. This is the main configuration file for settings such as
 email, dropbox upload etc.
 
-The only extra required is to add the correct IP of the raspberry in **hosts** file.
 
 ## Usage
     ansible-playbook playbook.yml
@@ -72,5 +58,4 @@ This has only been tested on Raspberry PI 3. Should be working with at least v2 
 
 ### [Func(tragic?) Fact] 
 Exactly this setup has cought thiefs trying to steel my motorcycle, twize.
-
 

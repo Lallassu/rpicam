@@ -38,11 +38,10 @@ from which host.
 * Copy SSH key to the raspberry (default password is "raspberry" in the raspian image, please do change!) (see below)
 
 ### Commands
-    ssh-copy-id pi@<ip>
-    # Copy ssh key
-    $ ssh-copy-id pi@<ip>
     # Write raspian image to disk
     $ sudo dd bs=1m if=<unzipped_image>.img of=/dev/<sd_card_disk> conv=sync
+    # Copy ssh key
+    $ ssh-copy-id pi@<ip>
 
 ## Configure
 Configure all settings in *configure_me.yml*. This is the main configuration file for settings such as

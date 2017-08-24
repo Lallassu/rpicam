@@ -21,12 +21,10 @@ When an alarm is triggered an email will be sent (in this case using gmail throu
 snapshot from the recorded movie to the specified email address including recorded timestamp and 
 from which host.
 
-**Example:**
-    **Subject:** rpi_cam2: Motion detection
-    **ALERT:** Motion detection(2017-08-24 07:56:08), CAMERA: rpi_cam2
-    
-    ![Image Preview](https://github.com/lallassu/rpicam/blob/master/example.png)
-
+### Alarm Email Example
+**Subject:** rpi_cam2: Motion detection<br>
+**ALERT:** Motion detection(2017-08-24 07:56:08), CAMERA: rpi_cam2<br>
+![Image Preview](https://github.com/lallassu/rpicam/blob/master/example.png)
 
 ## Prerequsities
 * Raspberry PI2 with an camera attached to the camera slot.
@@ -35,11 +33,16 @@ from which host.
     * Download raspian lite image.
        https://downloads.raspberrypi.org/raspbian_lite_latest
     * Format the memory card with FAT32 filesystem.
-    * Write the image to the card:
-      sudo dd bs=1m if=<unzipped_image>.img of=/dev/<sd_card_disk> conv=sync
+    * Write the image to the card (see below)
 * To make Dropbox upload work, create an application in Dropbox.
-* Copy SSH key to the raspberry (default password is "raspberry" in the raspian image, please do change!)
+* Copy SSH key to the raspberry (default password is "raspberry" in the raspian image, please do change!) (see below)
+
+### Commands
     ssh-copy-id pi@<ip>
+    # Copy ssh key
+    $ ssh-copy-id pi@<ip>
+    # Write raspian image to disk
+    $ sudo dd bs=1m if=<unzipped_image>.img of=/dev/<sd_card_disk> conv=sync
 
 ## Configure
 Configure all settings in *configure_me.yml*. This is the main configuration file for settings such as
@@ -55,7 +58,3 @@ screen and you can watch the process with 'screen -r motion' logged in as user '
 
 ## NOTE
 This has only been tested on Raspberry PI 3. Should be working with at least v2 as well (otherwise adjust RAM for tmpfs).
-
-### [Func(tragic?) Fact] 
-Exactly this setup has cought thiefs trying to steel my motorcycle, twize.
-

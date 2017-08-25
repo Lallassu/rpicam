@@ -28,8 +28,8 @@ from which host.
 **ALERT:** Motion detection(2017-08-24 07:56:08), CAMERA: rpi_cam2<br>
 ![Image Preview](https://github.com/lallassu/rpicam/blob/master/example.png)
 
-## Prerequsities
-* Raspberry PI2 with an camera attached to the camera slot.
+## Prerequisites
+* Raspberry PI (v3 tested) with an camera attached to the camera slot.
 * Host with ansible 1.2+ installed.
 * Raspian installed on the memory card.
     * Download raspian lite image.

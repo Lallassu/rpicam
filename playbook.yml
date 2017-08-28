@@ -28,6 +28,9 @@
       - name: Assign mailname
         raw:  "echo {{mailname}} > /etc/mailname"
 
+      - name: Mutt configuration
+        raw:  echo set record = "/tmp/sent" > /home/pi/.muttrc
+
       - name: Setup /etc/hosts
         lineinfile:
             path: /etc/hosts
